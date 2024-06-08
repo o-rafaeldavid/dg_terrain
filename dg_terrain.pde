@@ -48,7 +48,7 @@ void setup(){
 
   colorMode(HSB, 360, 100, 100);
   GL.add(
-    __terrains.get("Dune")
+    __terrains.get("Mountain Dune")
   );
   GL.get(0).mapLayersColorWithModel(CLM);
   colorMode(RGB, 255, 255, 255);

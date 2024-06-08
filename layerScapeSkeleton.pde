@@ -1,6 +1,6 @@
 class LayerScapeSkeleton{
     protected ArrayList<PVector> Points = new ArrayList<PVector>();
-    private float myHeight = -1;
+    private float myHeight = Integer.MAX_VALUE;
     public int maxIteration;
     public color fillColor;
     public float[] range;
@@ -28,7 +28,7 @@ class LayerScapeSkeleton{
     }
 
     public float getHeight(){
-        return myHeight;
+        return this.myHeight;
     }
 
     private void setPoints(){
@@ -37,20 +37,22 @@ class LayerScapeSkeleton{
             final float y_increment = random(range[0], range[1]);
             final PVector genP = new PVector((width * i) / (float) (maxIteration), prevPoint.y + y_increment);
             Points.add(genP);
-            if(genP.y > myHeight) myHeight = genP.y;
+            if(genP.y < this.myHeight) this.myHeight = genP.y;
             prevPoint = genP;
         }
     }
 
-    protected void debugPoints(PGraphics _g){
+    protected void debugPointsFun(PGraphics _g){
         //debugPoints
         if(debugPoints){
             _g.pushStyle();
-            _g.stroke(255, 0, 0);
-            _g.strokeWeight(10);
-            Points.forEach(
-                p -> _g.point(p.x, p.y)
-            );
+                _g.stroke(255, 0, 0);
+                _g.strokeWeight(10);
+                for(int i = 0; i < this.Points.size(); i++){
+                    PVector P = this.Points.get(i);
+                    if(P.y == this.myHeight) _g.stroke(0, 128, 255);
+                    _g.point(P.x, P.y);
+                }
             _g.popStyle();
         }
     }
@@ -73,7 +75,7 @@ class LayerScapeSkeleton{
                     //
                     fun.run();
                     //
-                    this.debugPoints(_g);
+                    this.debugPointsFun(_g);
             _g.popMatrix();
         _g.endDraw();
     }
