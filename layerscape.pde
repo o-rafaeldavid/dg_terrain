@@ -1,14 +1,13 @@
 class LayerScape extends LayerScapeSkeleton{
   private boolean bezier = false;
-  private ArrayList<PVector[]> listLine;
-  private ArrayList<float[]> listAngles;
+  private PVector[] sideOutlierPoints = new PVector[2];
+  private float medianHeight;
 
   LayerScape(
     int maxIteration,
     color fillColor,
     float[] range,
     float medianY,
-    float medianHeight,
     float threshold,
     boolean bezier
   ){
@@ -17,29 +16,15 @@ class LayerScape extends LayerScapeSkeleton{
       fillColor,
       range,
       medianY,
-      medianHeight,
       threshold
     );
     this.bezier = bezier;
-    if(bezier){
-      listLine = new ArrayList<PVector[]>();
-      listAngles = new ArrayList<float[]>();
-      float ang = random(-1 * HALF_PI, 0) - PI;
-
-      for(int i = 1; i < this.Points.size(); i++){
-        listLine.add(new PVector[]{
-          this.Points.get(i - 1),
-          this.Points.get(i),
-        });
-        PVector dirVector = directionVector(this.Points.get(i - 1), this.Points.get(i));
-        float dirAngle = (dirVector.x == 0) ? HALF_PI : atan(dirVector.y / dirVector.x);
-        float first = ang + PI;
-        float second = dirAngle + random(-1 * HALF_PI, 0);
-
-        listAngles.add(new float[]{ first, second });
-        ang = second;
-      }
-    }
+    this.sideOutlierPoints[0] = new PVector(
+      width + outlier,
+      this.Points.get(this.Points.size() - 1).y + random(range[0], range[1])
+    );
+    this.sideOutlierPoints[1] = new PVector(-outlier, medianY);
+    this.medianHeight = height - this.medianY;
   }
 
   public void display(PGraphics _g){
@@ -49,28 +34,33 @@ class LayerScape extends LayerScapeSkeleton{
           else _g.stroke(0, 0, 0, 128);
           _g.fill(fillColor);
           _g.beginShape();
+          
             if(!this.bezier){
               this.Points.forEach(
                 p -> _g.vertex(p.x, p.y)
               );
+
+              _g.vertex(this.sideOutlierPoints[0].x, this.sideOutlierPoints[0].y);
+              _g.vertex(width + outlier, medianY + outlier + this.medianHeight);
+              _g.vertex(-outlier, medianY + outlier + this.medianHeight);
+              _g.vertex(this.sideOutlierPoints[1].x, this.sideOutlierPoints[1].y);
             }
+            //////
             else{
-              for(int i = 0; i < listLine.size(); i++){
-                PVector[] anchors = listLine.get(i);
-                float[] angs = listAngles.get(i);
-                _g.vertex(anchors[0].x, anchors[0].y);
-                _g.bezierVertex(
-                  anchors[0].x + 20 * sin(angs[0]), anchors[0].y + 20 * cos(angs[0]),
-                  anchors[1].x + 20 * sin(angs[1]), anchors[1].y + 20 * cos(angs[1]),
-                  anchors[1].x, anchors[1].y
-                );
-              }
+              _g.curveVertex(this.sideOutlierPoints[1].x, this.sideOutlierPoints[1].y); //ultimo ponto
+              this.Points.forEach(
+                p -> _g.curveVertex(p.x, p.y)
+              );
+              _g.curveVertex(this.sideOutlierPoints[0].x, this.sideOutlierPoints[0].y);
+              _g.curveVertex(width + outlier, medianY + outlier + this.medianHeight);
+              _g.curveVertex(-outlier, medianY + outlier + this.medianHeight);
+              _g.curveVertex(this.sideOutlierPoints[1].x, this.sideOutlierPoints[1].y); //ultimo ponto
+              //desenhar o primeiro e o segundo para dar a ideia que o caminho fechou
+              _g.curveVertex(this.Points.get(0).x, this.Points.get(0).y);
+              _g.curveVertex(this.Points.get(1).x, this.Points.get(1).y);
             }
-            _g.vertex(width + outlier, medianY + outlier);
-            _g.vertex(width + outlier, medianY + outlier + medianHeight);
-            _g.vertex(-outlier, medianY + outlier + medianHeight);
-            _g.vertex(-outlier, medianY + outlier);
-          _g.endShape(CLOSE);
+
+          _g.endShape();
         _g.popStyle();
       }
     );

@@ -45,6 +45,8 @@ class GraphicLayer{
         ArrayList<Integer> colorsList = _CLM.getList();
         if(colorsList.size() != this.Layers.size()){
             println("GraphicLayer mapColorWithModel Method should get a ColorLightModel object with the same size of the Layers inside GraphicLayer");
+            println("Given ColorLightModel Length: " + colorsList.size());
+            println("Layers array Length: " + this.Layers.size());
             exit();
         }
         else{

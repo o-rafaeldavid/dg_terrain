@@ -1,6 +1,8 @@
 final int sceneLightType = round(random(0, 1)); ////// 0: grande contraste / 1: contraste / 2: normal
 final int sceneColorType = round(random(0, 2)); ////// 0: mono / 1: 2 pigmentos / 2: 3 pigmentos
 
+//////
+
 final ArrayList<ArrayList<ColorPercentage>> monoHueTones = new ArrayList<ArrayList<ColorPercentage>>() {{
     //
     add(new ArrayList<ColorPercentage>(){{
@@ -17,11 +19,15 @@ final ArrayList<ArrayList<ColorPercentage>> monoHueTones = new ArrayList<ArrayLi
     }});
 }};
 
+//////
+
 ArrayList<Float> sceneLerpHues = new ArrayList<Float>() {{
     for (int i = 0; i < sceneColorType + 1; i++) {
         add(random(0, 360));
     }
 }};
+
+//////
 
 void setHSB() { colorMode(HSB, 360, 100, 100); }
 

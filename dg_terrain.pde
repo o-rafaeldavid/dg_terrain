@@ -10,11 +10,13 @@ ArrayList<GraphicLayer> GL = new ArrayList<GraphicLayer>();
 
 ColorLightModel CLM;
 
+PVector thresholdPointer;
 void settings(){
   size(21 * scale, 9 * scale);
 }
 
 void setup(){
+  thresholdPointer = new PVector(width * 0.5, height * 0.5);
   colorMode(HSB, 360, 100, 100);
   /* three_color = new ArrayList<color[]>(){{
     add(new color[] {
@@ -69,25 +71,18 @@ void keyReleased() {
   }
 
   if(key == 'P' || key == 'p'){
-    CLM = new ColorLightModel(
-        monoHueTones.get(1),
-        "LINEAR",
-        10
-    );
+    CLM.changeLightKind("LINEAR");
     GL.get(0).mapLayersColorWithModel(CLM);
   }
 
   if(key == 'O' || key == 'o'){
-    CLM = new ColorLightModel(
-        monoHueTones.get(1),
-        "EXP",
-        10
-    );
+    CLM.changeLightKind("EXP");
     GL.get(0).mapLayersColorWithModel(CLM);
   }
 }
 
 void draw(){
+  thresholdPointer = new PVector(mouseX, mouseY);
   background(255);
   GL.forEach(
     gl -> gl.display()

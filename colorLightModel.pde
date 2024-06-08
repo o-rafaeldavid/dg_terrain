@@ -9,6 +9,11 @@ class ColorLightModel extends ColorPercentageList{
         int iterations
     ){
         super(colorPercentage);
+        if(lightKind != "LINEAR" && lightKind != "EXP"){
+            println("Light kind should be 'LINEAR' or 'EXP'");
+            println("- Given lightKind: " + lightKind);
+            exit();
+        }
         this.lightKind = lightKind;
         this.iterations = iterations;
         if(this.iterations <= this.colorPercentage.size()){
@@ -37,4 +42,14 @@ class ColorLightModel extends ColorPercentageList{
     }
 
     public ArrayList<Integer> getList(){ return allColors; }
+    public void changeLightKind(String lightKind){
+        if(lightKind != "LINEAR" && lightKind != "EXP"){
+            println("Light kind should be 'LINEAR' or 'EXP'");
+            println("- Given lightKind: " + lightKind);
+            exit();
+        }
+        this.lightKind = lightKind;
+        this.allColors = new ArrayList<Integer>();
+        this.generateColors();
+    }
 }
