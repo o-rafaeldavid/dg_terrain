@@ -3,12 +3,18 @@ class LayerScape extends LayerScapeSkeleton{
   private PVector[] sideOutlierPoints = new PVector[2];
   private float medianHeight;
 
+  private ArrayList<Gif> GifList = new ArrayList<Gif>();
+  private ArrayList<PVector> GifPoints = new ArrayList<PVector>();
+  public LayerScape layerBefore = null;
+
   LayerScape(
     int maxIteration,
     color fillColor,
     float[] range,
     float medianY,
     float threshold,
+    float probGifPerIteration,
+    float maxGifNum,
     boolean bezier
   ){
     super(
@@ -16,7 +22,9 @@ class LayerScape extends LayerScapeSkeleton{
       fillColor,
       range,
       medianY,
-      threshold
+      threshold,
+      probGifPerIteration,
+      maxGifNum
     );
     this.bezier = bezier;
     this.sideOutlierPoints[0] = new PVector(
@@ -61,8 +69,72 @@ class LayerScape extends LayerScapeSkeleton{
             }
 
           _g.endShape();
+
+          doGif(_g);
         _g.popStyle();
       }
     );
+  }
+
+  private PVector getRandomVisiblePoint(){
+    if(layerBefore == null) return null;
+    else{
+      PVector visiblePoint = new PVector(-1, -1);
+      boolean finished = false;
+      while(!finished){
+        println("AI CICLO");
+        float randX = random(0, width);
+
+        PVector thisSegmentPoint = new PVector(-1, -1);
+        PVector otherSegmentPoint = new PVector(-1, -1);
+
+        for(int k = 0; k <= 1; k++){
+          ArrayList<PVector> pointsToManage = (k == 0) ? this.Points : layerBefore.getPoints();
+
+          for(int index = 1; index < pointsToManage.size(); index++){
+            PVector prevPoint = pointsToManage.get(index - 1);
+            PVector nowPoint = pointsToManage.get(index);
+
+            if(prevPoint.x <= randX && randX < nowPoint.x){
+              println("EPA ENTREI AQUI");
+              float factor = (randX - prevPoint.x) / (nowPoint.x - prevPoint.x);
+              PVector P = PVector.lerp(prevPoint, nowPoint, factor);
+
+              if(k == 0) thisSegmentPoint = P;
+              else otherSegmentPoint = P;
+
+              break;
+            }
+          }
+        }
+
+        println(thisSegmentPoint);
+        println(otherSegmentPoint);
+
+        if(otherSegmentPoint.y > thisSegmentPoint.y){
+          finished = true;
+          visiblePoint = new PVector(randX, random(thisSegmentPoint.y, otherSegmentPoint.y));
+        }
+      }
+      return visiblePoint;
+    }
+  }
+
+  public void genGifs(){
+    for(int k = 0; k < maxGifNum; k++){
+      GifPoints.add(this.getRandomVisiblePoint());
+    }
+    println("============ GifPoints Salvos ============");
+    println(GifPoints);
+  }
+
+  private void doGif(PGraphics _g){
+    _g.pushStyle();
+      _g.stroke(0, 0, 255);
+      _g.strokeWeight(10);
+      GifPoints.forEach(
+        gP -> {if(gP != null) _g.point(gP.x, gP.y);}
+      );
+    _g.popStyle();
   }
 }

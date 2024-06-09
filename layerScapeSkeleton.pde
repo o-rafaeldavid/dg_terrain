@@ -1,6 +1,10 @@
 class LayerScapeSkeleton{
     protected ArrayList<PVector> Points = new ArrayList<PVector>();
+    protected float probGifPerIteration = 0;
+    protected float maxGifNum = 0;
+
     private float myHeight = Integer.MAX_VALUE;
+
     public int maxIteration;
     public color fillColor;
     public float[] range;
@@ -17,18 +21,34 @@ class LayerScapeSkeleton{
         color fillColor,
         float[] range,
         float medianY,
-        float threshold
+        float threshold,
+        float probGifPerIteration,
+        float maxGifNum
     ){
         this.maxIteration = maxIteration;
         this.fillColor = fillColor;
         this.range = range;
         this.medianY = medianY;
         this.threshold = threshold;
+        this.probGifPerIteration = probGifPerIteration;
+        this.maxGifNum = maxGifNum;
         this.setPoints();
     }
 
     public float getHeight(){
         return this.myHeight;
+    }
+
+    public float getProbGifPerIteration(){
+        return this.probGifPerIteration;
+    }
+
+    public float getMaxGifNum(){
+        return this.maxGifNum;
+    }
+
+    public ArrayList<PVector> getPoints(){
+        return this.Points;
     }
 
     private void setPoints(){

@@ -1,6 +1,15 @@
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Map;
+import gifAnimation.*;
+
+String[] gifLinks = {
+  "Atreides_Rise.gif",
+  "Atreides_siluette.gif",
+  "Chani_and_paul.gif",
+  "libelinha.gif",
+  "Thumper.gif"
+};
 
 Gradient GRAD;
 final int scale = 75;
@@ -10,12 +19,18 @@ ArrayList<GraphicLayer> GL = new ArrayList<GraphicLayer>();
 
 ColorLightModel CLM;
 
+Gif gif_teste;
+
 PVector thresholdPointer;
 void settings(){
   size(21 * scale, 9 * scale);
 }
 
 void setup(){
+  /* int rand = (int) random(0, gifLinks.length);
+  gif_teste = new Gif(this, gifLinks[rand]);
+  gif_teste.loop(); */
+
   thresholdPointer = new PVector(width * 0.5, height * 0.5);
   colorMode(HSB, 360, 100, 100);
   /* three_color = new ArrayList<color[]>(){{
@@ -87,7 +102,7 @@ void draw(){
   GL.forEach(
     gl -> gl.display()
   );
-
+  
   /* GRAD.display(); */
 
   /* pushStyle();

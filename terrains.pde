@@ -22,6 +22,8 @@ void SETUP__terrains(){
                     },
                     firstY,
                     1,
+                    0,
+                    0,
                     true
                 ));
                 firstY -= random(
@@ -55,6 +57,8 @@ void SETUP__terrains(){
                     },
                     firstY,
                     1,
+                    0,
+                    (int) random(0, 4),
                     (checkMountain) ? false : true
                 ));
                 firstY -= random(

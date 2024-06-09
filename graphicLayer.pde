@@ -13,31 +13,40 @@ class GraphicLayer{
     }
 
     private void orderLayers(){
-        if(Layers.size() > 1){
+        if(this.Layers.size() > 1){
             PVector thresholdRange = new PVector(random(0.7, 0.94), random(0.2, 0.3));
-            PVector heights = new PVector(Layers.get(0).getHeight(), -1);
-            Layers.forEach(layer -> {
+            PVector heights = new PVector(this.Layers.get(0).getHeight(), -1);
+            this.Layers.forEach(layer -> {
                 float layerHeight = layer.getHeight();
                 println(layerHeight);
                 if(heights.x > layerHeight) heights.x = layerHeight;
                 if(heights.y < layerHeight) heights.y = layerHeight;
             });
 
-            Collections.sort(Layers, new Comparator<LayerScape>() {
+            Collections.sort(this.Layers, new Comparator<LayerScape>() {
                 public int compare(LayerScape l1, LayerScape l2) {
                     return Float.compare(l1.getHeight(), l2.getHeight());
                 }
             });
 
             println("======");
-            Layers.forEach(layer -> {
+            for(int index = 0; index < this.Layers.size(); index++){
+                LayerScape layer = this.Layers.get(index);
                 println(layer.getHeight());
                 layer.threshold = map(
                     layer.getHeight(),
                     heights.x, heights.y,
                     thresholdRange.x, thresholdRange.y
                 );
-            });
+                if(layer.layerBefore == null){
+                    layer.layerBefore = (index == this.Layers.size() - 1) ? null : this.Layers.get(index + 1);
+                    println("==================================================================");
+                    println((index + 1) + " / " + this.Layers.size());
+                    layer.genGifs();
+                    println("Generated Gifs");
+                }
+                else println("já tem a «layer encima» associada");
+            }
         }
     }
 
@@ -59,7 +68,7 @@ class GraphicLayer{
     public void display(){
         this._g.beginDraw();
             this._g.clear();
-            Layers.forEach(layer -> layer.display(_g));
+            this.Layers.forEach(layer -> layer.display(_g));
         this._g.endDraw();
         this._g.updatePixels();
         image(this._g, 0, 0);
