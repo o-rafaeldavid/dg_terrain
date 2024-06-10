@@ -9,8 +9,9 @@ class MyGif{
 
     private float elevate = 1;
     private PGraphics graf;
+    private float maxVisibleLength = (float) Integer.MAX_VALUE;
 
-    MyGif(String S, int FPS, float elevate, float multiplierHeight){
+    MyGif(String S, int FPS, float elevate, float multiplierHeight, float maxVisibleLength){
         Set<String> keySet = gifFPSbySource.keySet();
         if(!keySet.contains(S)){
             println("A colocada no construtor MyGif deve estar dentro do keySet do hashMap gifFPSbySource:");
@@ -45,19 +46,34 @@ class MyGif{
             this.graf.updatePixels();
             this.allFrames[i] = this.graf.get();
         }
+
+        //
+        this.maxVisibleLength = maxVisibleLength;
+    }
+    //////
+
+    public float getMaxVisibleLength(){
+        return maxVisibleLength * height;
     }
 
-    //////
-    void display(PGraphics _g, PVector pos, color C){
+    //
+    public void display(PGraphics _g, PVector pos, float scaleFactor, color C){
         PImage frameShow = this.allFrames[this.counter % this.allFrames.length];
+        PVector newDimension = new PVector(frameShow.width, frameShow.height).mult(scaleFactor);
         _g.push();
-            _g.translate(0, -1 * elevate * dimensions.y);
+            _g.translate(- 1 * frameShow.width * 0.5, -1 * elevate * newDimension.y);
             _g.translate(pos.x, pos.y);
             _g.tint(C);
             _g.image(
                 frameShow,
                 0, 0,
-                frameShow.width, frameShow.height
+                newDimension.x, newDimension.y
+            );
+            _g.stroke(0, 0, 255);
+            _g.strokeWeight(10);
+            _g.point(
+                frameShow.width * 0.5,
+                elevate * newDimension.y
             );
         _g.pop();
 

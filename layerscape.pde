@@ -1,10 +1,14 @@
 class LayerScape extends LayerScapeSkeleton{
+  private int maxLayer = -1;
+  private int layerOrder = -1;
   private boolean bezier = false;
   private PVector[] sideOutlierPoints = new PVector[2];
   private float medianHeight;
 
   private ArrayList<MyGif> GifList = new ArrayList<MyGif>();
   private ArrayList<PVector> GifPoints = new ArrayList<PVector>();
+  private ArrayList<MyGif> GifsToChoice = new ArrayList<MyGif>();
+
   public LayerScape layerBefore = null;
 
   LayerScape(
@@ -15,6 +19,7 @@ class LayerScape extends LayerScapeSkeleton{
     float threshold,
     float probGifPerIteration,
     float maxGifNum,
+    ArrayList<MyGif> GifsToChoice,
     boolean bezier
   ){
     super(
@@ -33,6 +38,7 @@ class LayerScape extends LayerScapeSkeleton{
     );
     this.sideOutlierPoints[1] = new PVector(-outlier, medianY);
     this.medianHeight = height - this.medianY;
+    this.GifsToChoice = GifsToChoice;
   }
 
   public void display(PGraphics _g){
@@ -76,13 +82,12 @@ class LayerScape extends LayerScapeSkeleton{
     );
   }
 
-  private PVector getRandomVisiblePoint(){
+  private PVector getRandomVisiblePoint(float maxVisibleLength){
     if(layerBefore == null) return null;
     else{
       PVector visiblePoint = new PVector(-1, -1);
       boolean finished = false;
       while(!finished){
-        println("AI CICLO");
         float randX = random(0, width);
 
         PVector thisSegmentPoint = new PVector(-1, -1);
@@ -96,7 +101,6 @@ class LayerScape extends LayerScapeSkeleton{
             PVector nowPoint = pointsToManage.get(index);
 
             if(prevPoint.x <= randX && randX < nowPoint.x){
-              println("EPA ENTREI AQUI");
               float factor = (randX - prevPoint.x) / (nowPoint.x - prevPoint.x);
               PVector P = PVector.lerp(prevPoint, nowPoint, factor);
 
@@ -108,12 +112,11 @@ class LayerScape extends LayerScapeSkeleton{
           }
         }
 
-        println(thisSegmentPoint);
-        println(otherSegmentPoint);
-
         if(otherSegmentPoint.y > thisSegmentPoint.y){
           finished = true;
-          visiblePoint = new PVector(randX, random(thisSegmentPoint.y, otherSegmentPoint.y));
+          float deltaY = otherSegmentPoint.y - thisSegmentPoint.y;
+          float maxDelta = (deltaY > maxVisibleLength) ? maxVisibleLength : deltaY;
+          visiblePoint = new PVector(randX, random(thisSegmentPoint.y, thisSegmentPoint.y + maxDelta));
         }
       }
       return visiblePoint;
@@ -121,23 +124,42 @@ class LayerScape extends LayerScapeSkeleton{
   }
 
   public void genGifs(){
-    for(int k = 0; k < maxGifNum; k++){
-      PVector P = this.getRandomVisiblePoint();
-      GifPoints.add(this.getRandomVisiblePoint());
-      if(P != null) GifList.add(allMyGifs.get((int) random(0, allMyGifs.size())));
+    println("--> LayerScape: gerando gifs na Layer");
+    if(this.GifsToChoice.size() >= 1 && maxGifNum == 0){
+      for(int k = 0; k <= maxGifNum; k++){
+        if(random(0, 1) < probGifPerIteration){
+
+          MyGif randomGifChosen = this.GifsToChoice.get((int) random(0, GifsToChoice.size()));
+          PVector P = this.getRandomVisiblePoint(randomGifChosen.getMaxVisibleLength());
+          GifPoints.add(P);
+          if(P != null) GifList.add(randomGifChosen);
+        }
+      }
+      println("--> LayerScape: gifs criados [ " + GifList.size() + " gifs ]");
     }
-    println("============ GifPoints Salvos ============");
-    println(GifPoints);
+    else{
+      println("--> LayerScape: não há gifs");
+    }
+  }
+
+  public void setOrder(int layerOrder, int maxLayer){
+    this.layerOrder = layerOrder;
+    this.maxLayer = maxLayer;
   }
 
   private void doGif(PGraphics _g){
-    _g.pushStyle();
+    _g.push();
       _g.stroke(0, 0, 255);
       _g.strokeWeight(10);
       for(int i = 0; i < GifPoints.size(); i++){
         PVector point = GifPoints.get(i);
-        if(point != null) GifList.get(i).display(_g, point, this.fillColor);
+        if(point != null) GifList.get(i).display(
+                            _g,
+                            point,
+                            (maxLayer != -1 && layerOrder != -1) ? map(layerOrder, 0, maxLayer, 0.3, 1) : 1,
+                            this.fillColor
+                          );
       }
-    _g.popStyle();
+    _g.pop();
   }
 }

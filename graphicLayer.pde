@@ -18,7 +18,6 @@ class GraphicLayer{
             PVector heights = new PVector(this.Layers.get(0).getHeight(), -1);
             this.Layers.forEach(layer -> {
                 float layerHeight = layer.getHeight();
-                println(layerHeight);
                 if(heights.x > layerHeight) heights.x = layerHeight;
                 if(heights.y < layerHeight) heights.y = layerHeight;
             });
@@ -29,37 +28,39 @@ class GraphicLayer{
                 }
             });
 
-            println("======");
             for(int index = 0; index < this.Layers.size(); index++){
                 LayerScape layer = this.Layers.get(index);
-                println(layer.getHeight());
+                layer.setOrder(index, this.Layers.size());
                 layer.threshold = map(
                     layer.getHeight(),
                     heights.x, heights.y,
                     thresholdRange.x, thresholdRange.y
                 );
+                println((index + 1) + " / " + this.Layers.size());
                 if(layer.layerBefore == null){
                     layer.layerBefore = (index == this.Layers.size() - 1) ? null : this.Layers.get(index + 1);
-                    println("==================================================================");
-                    println((index + 1) + " / " + this.Layers.size());
                     layer.genGifs();
-                    println("Generated Gifs");
+                    println("--> GraphicLayer: Gifs Gerados");
                 }
-                else println("já tem a «layer encima» associada");
+                else println("--> GraphicLayer: Já tem a «layer encima» associada");
             }
         }
     }
 
-    public void mapLayersColorWithModel(ColorLightModel _CLM){
+    public void mapLayersColorWithModel(ColorLightModel _CLM, int from, int to){
         ArrayList<Integer> colorsList = _CLM.getList();
-        if(colorsList.size() != this.Layers.size()){
-            println("GraphicLayer mapColorWithModel Method should get a ColorLightModel object with the same size of the Layers inside GraphicLayer");
+        if(colorsList.size() <= this.Layers.size() || from < 0 || to > colorsList.size() || from >= to){
+            println("GraphicLayer mapColorWithModel Method should get a ColorLightModel object with the same size or less of the Layers inside GraphicLayer");
             println("Given ColorLightModel Length: " + colorsList.size());
             println("Layers array Length: " + this.Layers.size());
+            println("The 'from' and 'to' components of mapLayersColorWithModel method from GraphicLayer should be between 0 and the size of ColorLightModel used");
+            println("'from' should be less than 'to'");
+            println("From: " + from + " | To: " + to);
+            println("Size of CLM: " + colorsList.size());
             exit();
         }
         else{
-            for(int i = 0; i < colorsList.size(); i++){
+            for(int i = from; i < to; i++){
                 this.Layers.get(i).fillColor = colorsList.get(colorsList.size() - 1 - i);
             }
         }

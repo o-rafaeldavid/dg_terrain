@@ -3,17 +3,14 @@ import java.util.Comparator;
 import java.util.Map;
 import java.util.Set;
 import java.util.List;
+import java.util.Arrays;
 import gifAnimation.*;
-
-static PApplet MAIN_APPLET;
-ArrayList<MyGif> allMyGifs = new ArrayList<MyGif>();
-HashMap<String, float[]> gifFPSbySource;
 
 Gradient GRAD;
 final int scale = 75;
 final int outlier = 300;
 
-ArrayList<GraphicLayer> GL;
+ArrayList<GraphicLayer> MainGraphics;
 
 ColorLightModel CLM;
 
@@ -24,23 +21,9 @@ void settings(){
 }
 
 void setup(){
-  gifFPSbySource = new HashMap<String, float[]>(){{
-    // gif Source                      FPS / elevation / size of height relative to viewport
-    put("Atreides_Rise.gif", new float[]{5, 0.8, 0.35});
-    put("Atreides_siluette.gif", new float[]{10, 0.8, 0.35});
-    put("Chani_and_paul.gif", new float[]{5, 0.87, 0.15});
-    put("Orinitoptero.gif", new float[]{25, 1.2, 0.35});
-    put("Thumper.gif", new float[]{6, 0.95, 0.35});
-  }};
-  gifFPSbySource.entrySet().forEach(
-    entry -> allMyGifs.add(new MyGif(
-      entry.getKey(),
-      (int) entry.getValue()[0],
-      entry.getValue()[1],
-      entry.getValue()[2]
-    ))
-  );
-
+  println("============ SETUP INICIALIZADO ============");
+  SETUP__gifsMap();
+  
   thresholdPointer = new PVector(width * 0.5, height * 0.5);
   colorMode(HSB, 360, 100, 100);
   /* three_color = new ArrayList<color[]>(){{
@@ -68,49 +51,35 @@ void setup(){
       add(new ColorPercentage(color(0, 0, 255, 0), 1.0f));
     }}
   );
-
   SETUP__terrains();
 
   colorMode(HSB, 360, 100, 100);
-  GL = new ArrayList<GraphicLayer>();
-  GL.add(
-    __terrains.get("Mountain Dune")
-  );
-  GL.get(0).mapLayersColorWithModel(CLM);
+  MainGraphics = new ArrayList<GraphicLayer>();
+  MainGraphics = __terrains.get("Mountain Dune");
   colorMode(RGB, 255, 255, 255);
 }
 
 void keyReleased() {
   if(key == 'D' || key == 'd'){
-    GL.forEach(
+    MainGraphics.forEach(
       gl -> gl.Layers.forEach(
         layer -> { layer.debugPoints = !layer.debugPoints; }
       )
     );
   }
   if(key == 'L' || key == 'l'){
-    GL.forEach(
+    MainGraphics.forEach(
       gl -> gl.Layers.forEach(
         layer -> { layer.debugLine = !layer.debugLine; }
       )
     );
-  }
-
-  if(key == 'P' || key == 'p'){
-    CLM.changeLightKind("LINEAR");
-    GL.get(0).mapLayersColorWithModel(CLM);
-  }
-
-  if(key == 'O' || key == 'o'){
-    CLM.changeLightKind("EXP");
-    GL.get(0).mapLayersColorWithModel(CLM);
   }
 }
 
 void draw(){
   thresholdPointer = new PVector(mouseX, mouseY);
   background(255);
-  GL.forEach(
+  MainGraphics.forEach(
     gl -> gl.display()
   );
   
