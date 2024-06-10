@@ -78,7 +78,7 @@ class LayerScapeSkeleton{
     }
 
     protected void displaySkeleton(PGraphics _g, Runnable fun){
-        _g.beginDraw();
+        /* _g.beginDraw(); */
             _g.pushMatrix();
                 _g.translate(
                     map(
@@ -97,6 +97,6 @@ class LayerScapeSkeleton{
                     //
                     this.debugPointsFun(_g);
             _g.popMatrix();
-        _g.endDraw();
+        /* _g.endDraw(); */
     }
 }

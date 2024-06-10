@@ -54,10 +54,10 @@ class Gradient extends ColorPercentageList{
         this._img = this._g.get();
     }
 
-    public void display(){
-        pushStyle();
-            imageMode(CENTER);
-            image(this._img, width * .5f, height * .5f);
-        popStyle();
+    public void display(PGraphics _g){
+        _g.push();
+            _g.imageMode(CENTER);
+            _g.image(this._img, width * .5f, height * .5f);
+        _g.pop();
     }
 }

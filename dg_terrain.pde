@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Arrays;
 import gifAnimation.*;
 
+PGraphics MAIN_GRAPHICS;
+
 Gradient GRAD;
 final int scale = 75;
 final int outlier = 300;
@@ -17,11 +19,11 @@ ColorLightModel CLM;
 PVector thresholdPointer;
 void settings(){
   size(21 * scale, 9 * scale);
-  MAIN_APPLET = this;
 }
 
 void setup(){
   println("============ SETUP INICIALIZADO ============");
+  MAIN_APPLET = this;
   SETUP__gifsMap();
   
   thresholdPointer = new PVector(width * 0.5, height * 0.5);
@@ -54,9 +56,10 @@ void setup(){
   SETUP__terrains();
 
   colorMode(HSB, 360, 100, 100);
-  MainGraphics = new ArrayList<GraphicLayer>();
-  MainGraphics = __terrains.get("Mountain Dune");
+    MainGraphics = new ArrayList<GraphicLayer>();
+    MainGraphics = __terrains.get("Mountain Dune");
   colorMode(RGB, 255, 255, 255);
+  println("============ SETUP FINALIZADO ============");
 }
 
 void keyReleased() {
@@ -82,16 +85,6 @@ void draw(){
   MainGraphics.forEach(
     gl -> gl.display()
   );
-  
-  /* GRAD.display(); */
-
-  /* pushStyle();
-    noStroke();
-    for(int i = 0; i < CLM.getList().size(); i++){
-      fill(CLM.getList().get(i));
-      square(i * width / CLM.getList().size(), 40, 40);
-    }
-  popStyle(); */
 }
 
 

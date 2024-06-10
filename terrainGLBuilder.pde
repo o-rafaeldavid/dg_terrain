@@ -1,9 +1,7 @@
 GraphicLayer terrainGLBuilder(
     String name,
     int id,
-    ColorLightModel _CLM,
-    int from,
-    int to
+    ColorLightModel _CLM
 ){
     if(!Arrays.asList(terrainNames).contains(name)){
         println("To use terrainGLBuilder you should use a String from terrainNames");
@@ -16,23 +14,17 @@ GraphicLayer terrainGLBuilder(
     else{
         GraphicLayer returnGraphic;
         int clmSize = _CLM.getList().size();
-        if(from >= to || from < 0 || to > clmSize || to <= 0 || from >= clmSize){
-            println("The 'from' and 'to' components of terrainGLBuilder should be between 0 and the size of ColorLightModel used");
-            println("'from' should be less than 'to'");
-            println("From: " + from + " | To: " + to);
-            println("Size of CLM: " + clmSize);
-            exit();
-        }
         
         //////
         //////
+        println("terreno");
         switch(name){
             ///
             case "Dune":
                 returnGraphic = new GraphicLayer(id, new ArrayList<LayerScape>(){{
                     float firstY = random(0.8, 0.95) * height;
                     //
-                    for(int i = from; i < to; i++){
+                    for(int i = 0; i < clmSize; i++){
                         PVector minMax = new PVector(
                             map(i, 0, clmSize, 10, 30),
                             map(i, 0, clmSize, 50, 80)
@@ -56,14 +48,14 @@ GraphicLayer terrainGLBuilder(
                         ) * height;
                     }
                 }});
-                returnGraphic.mapLayersColorWithModel(CLM, from, to);
+                returnGraphic.mapLayersColorWithModel(CLM);
                 break;
             ///
             default :
                 returnGraphic = new GraphicLayer(id, new ArrayList<LayerScape>(){{
                     float firstY = random(0.78, 0.92) * height;
                     //
-                    for(int i = from; i < to; i++){
+                    for(int i = 0; i < clmSize; i++){
                         boolean checkMountain = (i >= clmSize * 0.7);
                         PVector minMax = new PVector(
                             map(i, 0, clmSize, (checkMountain) ? 90 : map(i, 0, clmSize * 0.7, 10, 20), (checkMountain) ? 90 : map(i, 0, clmSize * 0.7, 30, 50)),
@@ -89,13 +81,22 @@ GraphicLayer terrainGLBuilder(
                             map(clmSize, 0, 10, (checkMountain) ? 0.25 : 0.09, (checkMountain) ? 0.2 : 0.05)
                         ) * height;
                     }
-                }});
-                returnGraphic.mapLayersColorWithModel(CLM, from, to);
+                }}, new Gradient(
+                        true,
+                        new PVector(0, 0),
+                        PI / 5,
+                        new ArrayList<ColorPercentage>(){{
+                            add(new ColorPercentage(color(255, 0, 0, 255), 0.0f));
+                            add(new ColorPercentage(color(0, 255, 255, 64), 0.75f));
+                            add(new ColorPercentage(color(0, 0, 255, 0), 1.0f));
+                        }}
+                    ), 7);
+                returnGraphic.mapLayersColorWithModel(CLM);
                 break;	
         }
         //////
         //////
-
+        println("terreno escolhido");
         return returnGraphic;
     }
 }
