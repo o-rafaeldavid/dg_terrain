@@ -3,7 +3,7 @@ class LayerScape extends LayerScapeSkeleton{
   private PVector[] sideOutlierPoints = new PVector[2];
   private float medianHeight;
 
-  private ArrayList<Gif> GifList = new ArrayList<Gif>();
+  private ArrayList<MyGif> GifList = new ArrayList<MyGif>();
   private ArrayList<PVector> GifPoints = new ArrayList<PVector>();
   public LayerScape layerBefore = null;
 
@@ -70,7 +70,7 @@ class LayerScape extends LayerScapeSkeleton{
 
           _g.endShape();
 
-          doGif(_g);
+          this.doGif(_g);
         _g.popStyle();
       }
     );
@@ -122,7 +122,9 @@ class LayerScape extends LayerScapeSkeleton{
 
   public void genGifs(){
     for(int k = 0; k < maxGifNum; k++){
+      PVector P = this.getRandomVisiblePoint();
       GifPoints.add(this.getRandomVisiblePoint());
+      if(P != null) GifList.add(allMyGifs.get((int) random(0, allMyGifs.size())));
     }
     println("============ GifPoints Salvos ============");
     println(GifPoints);
@@ -132,9 +134,10 @@ class LayerScape extends LayerScapeSkeleton{
     _g.pushStyle();
       _g.stroke(0, 0, 255);
       _g.strokeWeight(10);
-      GifPoints.forEach(
-        gP -> {if(gP != null) _g.point(gP.x, gP.y);}
-      );
+      for(int i = 0; i < GifPoints.size(); i++){
+        PVector point = GifPoints.get(i);
+        if(point != null) GifList.get(i).display(_g, point, this.fillColor);
+      }
     _g.popStyle();
   }
 }

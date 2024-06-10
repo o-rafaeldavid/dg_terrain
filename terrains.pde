@@ -46,8 +46,8 @@ void SETUP__terrains(){
                 println(i);
                 println(checkMountain);
                 PVector minMax = new PVector(
-                    map(i, 0, CLM.getList().size(), (checkMountain) ? 90 : 10, (checkMountain) ? 90 : 30),
-                    map(i, 0, CLM.getList().size(), (checkMountain) ? 100 : 50, (checkMountain) ? 170 : 80)
+                    map(i, 0, CLM.getList().size(), (checkMountain) ? 90 : map(i, 0, clmSize * 0.7, 10, 20), (checkMountain) ? 90 : map(i, 0, clmSize * 0.7, 30, 50)),
+                    map(i, 0, CLM.getList().size(), (checkMountain) ? 100 : map(i, 0, clmSize * 0.7, 50, 70), (checkMountain) ? 170 : map(i, 0, clmSize * 0.7, 80, 100))
                 );
                 add(new LayerScape(
                     int(random((checkMountain) ? 5 : 3, (checkMountain) ? 14 : 6)), color(0),
@@ -58,7 +58,7 @@ void SETUP__terrains(){
                     firstY,
                     1,
                     0,
-                    (int) random(0, 4),
+                    (checkMountain) ? 0 : (int) random(0, 4),
                     (checkMountain) ? false : true
                 ));
                 firstY -= random(

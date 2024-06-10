@@ -1,35 +1,45 @@
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Map;
+import java.util.Set;
+import java.util.List;
 import gifAnimation.*;
 
-String[] gifLinks = {
-  "Atreides_Rise.gif",
-  "Atreides_siluette.gif",
-  "Chani_and_paul.gif",
-  "libelinha.gif",
-  "Thumper.gif"
-};
+static PApplet MAIN_APPLET;
+ArrayList<MyGif> allMyGifs = new ArrayList<MyGif>();
+HashMap<String, float[]> gifFPSbySource;
 
 Gradient GRAD;
 final int scale = 75;
 final int outlier = 300;
 
-ArrayList<GraphicLayer> GL = new ArrayList<GraphicLayer>();
+ArrayList<GraphicLayer> GL;
 
 ColorLightModel CLM;
-
-Gif gif_teste;
 
 PVector thresholdPointer;
 void settings(){
   size(21 * scale, 9 * scale);
+  MAIN_APPLET = this;
 }
 
 void setup(){
-  /* int rand = (int) random(0, gifLinks.length);
-  gif_teste = new Gif(this, gifLinks[rand]);
-  gif_teste.loop(); */
+  gifFPSbySource = new HashMap<String, float[]>(){{
+    // gif Source                      FPS / elevation / size of height relative to viewport
+    put("Atreides_Rise.gif", new float[]{5, 0.8, 0.35});
+    put("Atreides_siluette.gif", new float[]{10, 0.8, 0.35});
+    put("Chani_and_paul.gif", new float[]{5, 0.87, 0.15});
+    put("Orinitoptero.gif", new float[]{25, 1.2, 0.35});
+    put("Thumper.gif", new float[]{6, 0.95, 0.35});
+  }};
+  gifFPSbySource.entrySet().forEach(
+    entry -> allMyGifs.add(new MyGif(
+      entry.getKey(),
+      (int) entry.getValue()[0],
+      entry.getValue()[1],
+      entry.getValue()[2]
+    ))
+  );
 
   thresholdPointer = new PVector(width * 0.5, height * 0.5);
   colorMode(HSB, 360, 100, 100);
@@ -62,6 +72,7 @@ void setup(){
   SETUP__terrains();
 
   colorMode(HSB, 360, 100, 100);
+  GL = new ArrayList<GraphicLayer>();
   GL.add(
     __terrains.get("Mountain Dune")
   );
