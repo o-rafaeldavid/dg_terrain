@@ -21,7 +21,7 @@ String lightKind = "";
 PVector thresholdPointer;
 
 int TEMPO = 15;
-int FRAME_RATE = 30;
+int FRAME_RATE = 24;
 int frameCounter = 0;
 String folderPath = "";
 
@@ -92,6 +92,8 @@ void keyReleased() {
         for (File file : files) {
           file.delete();
         }
+        
+        println("============ ELIMINADO ============");
       }
     }
     folder.delete();
@@ -112,16 +114,16 @@ void draw(){
   }
   background(255);
   if(keys['a'] || keys['A']){
-    thresholdPointer.x = thresholdPointer.x - random(5, 12);
+    thresholdPointer.x = thresholdPointer.x - random(0, 3);
   }
   if(keys['d'] || keys['D']){
-    thresholdPointer.x = thresholdPointer.x + random(5, 12);
+    thresholdPointer.x = thresholdPointer.x + random(0, 3);
   }
   if(keys['w'] || keys['w']){
-    thresholdPointer.y = thresholdPointer.y - random(5, 12);
+    thresholdPointer.y = thresholdPointer.y - random(0, 3);
   }
   if(keys['s'] || keys['S']){
-    thresholdPointer.y = thresholdPointer.y + random(5, 12);
+    thresholdPointer.y = thresholdPointer.y + random(0, 3);
   }
   sky.get(clmIndex).display(this.g);
   MainGraphics.forEach(
