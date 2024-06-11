@@ -86,12 +86,12 @@ class LayerScape extends LayerScapeSkeleton{
     this.privateDisplay(_g, this.fillColor);
   }
 
-  private PVector getRandomVisiblePoint(float maxVisibleLength){
+  private PVector getRandomVisiblePoint(float maxVisibleLength, float x){
 
       PVector visiblePoint = new PVector(-1, -1);
       boolean finished = false;
       while(!finished){
-        float randX = random(0, width);
+        float randX = (x == -1) ? random(0, width) : x;
 
         PVector thisSegmentPoint = new PVector(-1, -1);
         PVector otherSegmentPoint = new PVector(-1, -1);
@@ -134,15 +134,18 @@ class LayerScape extends LayerScapeSkeleton{
 
   public void genGifs(){
     println("--> LayerScape: gerando gifs na Layer");
-    
-    if (layerBefore == null && this.maxGifNum > 1) this.maxGifNum = 1;
+    boolean nullBeforeBigNum = false;
+    if (layerBefore == null && this.maxGifNum > 0){
+      nullBeforeBigNum = true;
+      this.maxGifNum = 0;
+    }
 
     if(this.GifsToChoice.size() >= 1){
       for(int k = 0; k <= maxGifNum; k++){
         if(random(0, 1) < probGifPerIteration){
 
-          MyGif randomGifChosen = this.GifsToChoice.get((int) random(0, GifsToChoice.size()));
-          PVector P = this.getRandomVisiblePoint(randomGifChosen.getMaxVisibleLength());
+          MyGif randomGifChosen = (nullBeforeBigNum) ? __gifsMap.get(gifNames[(int) random(0, 3)]) : this.GifsToChoice.get((int) random(0, GifsToChoice.size()));
+          PVector P = (nullBeforeBigNum) ? this.getRandomVisiblePoint(randomGifChosen.getMaxVisibleLength(), width * 0.5) : this.getRandomVisiblePoint(randomGifChosen.getMaxVisibleLength(), -1);
           GifPoints.add(P);
           if(P != null) GifList.add(randomGifChosen);
         }

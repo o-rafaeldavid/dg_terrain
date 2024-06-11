@@ -4,6 +4,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.List;
 import java.util.Arrays;
+import java.io.File;
 import gifAnimation.*;
 
 PGraphics MAIN_GRAPHICS;
@@ -19,6 +20,11 @@ String lightKind = "";
 
 PVector thresholdPointer;
 
+int TEMPO = 1;
+int FRAME_RATE = 60;
+int frameCounter = 0;
+String folderPath = "";
+
 ///
 void settings(){
   size(21 * scale, 9 * scale);
@@ -26,6 +32,15 @@ void settings(){
 
 void setup(){
   println("============ SETUP INICIALIZADO ============");
+  frameRate(FRAME_RATE);
+  
+  println("============ DIRETORIO CRIADO ============");
+  folderPath = System.currentTimeMillis() + "";
+  File folder = new File(folderPath);
+  if (!folder.exists()) {
+    folder.mkdir();
+  }
+
   MAIN_APPLET = this;
   SETUP__gifsMap();
   SETUP_SKY();
@@ -34,15 +49,6 @@ void setup(){
   sky.get(clmIndex).loadGradient();
   
   thresholdPointer = new PVector(width * 0.5, height * 0.5);
-  colorMode(HSB, 360, 100, 100);
-  /* three_color = new ArrayList<color[]>(){{
-    add(new color[] {
-      color(211, 17, 30),
-      color(5, 15, 58),
-      color(20, 6, 19),
-    });
-  }}; */
-  colorMode(RGB, 255, 255, 255);
 
   CLM = new ColorLightModel(
     tones.get(clmIndex),
@@ -55,13 +61,13 @@ void setup(){
 
   colorMode(HSB, 360, 100, 100);
     MainGraphics = new ArrayList<GraphicLayer>();
-    MainGraphics = __terrains.get("Mountain Dune");
+    MainGraphics = __terrains.get((random(1) < 0.5f) ? "Dune" : "Mountain Dune");
   colorMode(RGB, 255, 255, 255);
   println("============ SETUP FINALIZADO ============");
 }
 
 void keyReleased() {
-  if(key == 'D' || key == 'd'){
+  /* if(key == 'D' || key == 'd'){
     MainGraphics.forEach(
       gl -> gl.Layers.forEach(
         layer -> { layer.debugPoints = !layer.debugPoints; }
@@ -74,16 +80,57 @@ void keyReleased() {
         layer -> { layer.debugLine = !layer.debugLine; }
       )
     );
+  } */
+  keys[key] = false;
+
+  if(key == 'n' || key == 'N'){
+    noLoop();
+    File folder = new File(folderPath);
+    if (folder.isDirectory()) {
+      File[] files = folder.listFiles();
+      if (files != null) {
+        for (File file : files) {
+          file.delete();
+        }
+      }
+    }
+    folder.delete();
+    println("============ ELIMINADO ============");
+    /* exit(); */
   }
 }
 
+boolean[] keys = new boolean[256];
+void keyPressed(){
+  keys[key] = true;
+}
+
 void draw(){
-  thresholdPointer = new PVector(mouseX, mouseY);
+  if(frameCounter == FRAME_RATE * TEMPO){
+    println("============ FINALIZADO ============");
+    exit();
+  }
   background(255);
+  if(keys['a'] || keys['A']){
+    thresholdPointer.x = thresholdPointer.x - random(7, 20);
+  }
+  if(keys['d'] || keys['D']){
+    thresholdPointer.x = thresholdPointer.x + random(7, 20);
+  }
+  if(keys['w'] || keys['w']){
+    thresholdPointer.y = thresholdPointer.y - random(7, 20);
+  }
+  if(keys['s'] || keys['S']){
+    thresholdPointer.y = thresholdPointer.y + random(7, 20);
+  }
   sky.get(clmIndex).display(this.g);
   MainGraphics.forEach(
     gl -> gl.display()
   );
+
+  println(frameCount / FRAME_RATE);
+  saveFrame(folderPath + "/frame_" + nf(frameCounter, 5) + ".png");
+  frameCounter++;
 }
 
 

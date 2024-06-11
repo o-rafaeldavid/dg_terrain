@@ -26,6 +26,7 @@ GraphicLayer terrainGLBuilder(
                     float firstY = random(0.8, 0.95) * height;
                     //
                     for(int i = 0; i < clmSize; i++){
+                        final int k = i;
                         PVector minMax = new PVector(
                             map(i, 0, clmSize, 10, 30),
                             map(i, 0, clmSize, 50, 80)
@@ -37,10 +38,18 @@ GraphicLayer terrainGLBuilder(
                                 random(minMax.x, minMax.y)
                             },
                             firstY,
-                            map(i, 0, clmSize, 0.1, 1),
-                            0,
-                            0,
-                            new ArrayList<MyGif>(),
+                            1,
+                            0.5,
+                            (k == 0) ? 1 : (int) random(0, 4),
+                            new ArrayList<MyGif>(){{
+                                add(__gifsMap.get(gifNames[(int) random(3, gifNames.length - 2)]));
+                                add(__gifsMap.get(gifNames[(int) random(3, gifNames.length - 2)]));
+                                add(__gifsMap.get(gifNames[(int) random(3, gifNames.length - 2)]));
+                                add(__gifsMap.get(gifNames[(int) random(3, gifNames.length - 2)]));
+                                add(__gifsMap.get(gifNames[(int) random(3, gifNames.length - 2)]));
+                                if(k > clmSize * 0.7) add(__gifsMap.get("Orinitoptero.gif"));
+                                if(k > clmSize * 0.7) add(__gifsMap.get("Ornitopther_2.gif"));
+                            }},
                             true
                         ));
                         firstY -= random(
@@ -57,6 +66,7 @@ GraphicLayer terrainGLBuilder(
                     float firstY = random(0.78, 0.92) * height;
                     //
                     for(int i = 0; i < clmSize; i++){
+                        final int k = i;
                         boolean checkMountain = (i >= clmSize * 0.7);
                         PVector minMax = new PVector(
                             map(i, 0, clmSize, (checkMountain) ? 90 : map(i, 0, clmSize * 0.7, 10, 20), (checkMountain) ? 90 : map(i, 0, clmSize * 0.7, 30, 50)),
@@ -70,12 +80,16 @@ GraphicLayer terrainGLBuilder(
                             },
                             firstY,
                             1,
-                            1,
-                            /* (checkMountain) ? 0 :  */(int) random(0, 4),
+                            0.5,
+                            (k == 0) ? 1 : (int) random(0, 4),
                             new ArrayList<MyGif>(){{
-                                add(__gifsMap.get("Atreides_Rise.gif"));
-                                add(__gifsMap.get("Atreides_siluette_2.gif"));
-                                add(__gifsMap.get("Atreides_siluette.gif"));
+                                
+                                add(__gifsMap.get(gifNames[(int) random(3, gifNames.length - 2)]));
+                                add(__gifsMap.get(gifNames[(int) random(3, gifNames.length - 2)]));
+                                add(__gifsMap.get(gifNames[(int) random(3, gifNames.length - 2)]));
+                                add(__gifsMap.get(gifNames[(int) random(3, gifNames.length - 2)]));
+                                add(__gifsMap.get(gifNames[(int) random(3, gifNames.length - 2)]));
+                                
                                 if(checkMountain) add(__gifsMap.get("Orinitoptero.gif"));
                                 if(checkMountain) add(__gifsMap.get("Ornitopther_2.gif"));
                             }},
