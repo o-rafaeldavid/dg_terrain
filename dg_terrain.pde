@@ -20,7 +20,7 @@ String lightKind = "";
 
 PVector thresholdPointer;
 
-int TEMPO = 1;
+int TEMPO = 15;
 int FRAME_RATE = 30;
 int frameCounter = 0;
 String folderPath = "";
