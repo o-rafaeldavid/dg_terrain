@@ -171,7 +171,7 @@ class LayerScape extends LayerScapeSkeleton{
         if(point != null) GifList.get(i).display(
                             _g,
                             point,
-                            (layerBefore == null) ? 2 : (maxLayer != -1 && layerOrder != -1) ? map(layerOrder, 0, maxLayer, 0.3, 1) : 1,
+                            (layerBefore == null) ? 2.2 : (maxLayer != -1 && layerOrder != -1) ? map(layerOrder, 0, maxLayer, 0.3, 1) : 1,
                             this.fillColor
                           );
       }

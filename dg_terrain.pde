@@ -22,7 +22,7 @@ PVector thresholdPointer;
 float[] thresholdMinMax = new float[]{
   random(0, 3),
   random(4, 9)
-}
+};
 int TEMPO = 15;
 int FRAME_RATE = 30;
 int frameCounter = 0;
