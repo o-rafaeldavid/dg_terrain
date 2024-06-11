@@ -85,7 +85,6 @@ void keyReleased() {
     );
   } */
   keys[key] = false;
-  }
 }
 
 boolean[] keys = new boolean[256];
