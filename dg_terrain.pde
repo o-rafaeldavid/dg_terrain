@@ -8,15 +8,18 @@ import gifAnimation.*;
 
 PGraphics MAIN_GRAPHICS;
 
-Gradient GRAD;
 final int scale = 75;
 final int outlier = 300;
 
 ArrayList<GraphicLayer> MainGraphics;
 
 ColorLightModel CLM;
+int clmIndex = -1;
+String lightKind = "";
 
 PVector thresholdPointer;
+
+///
 void settings(){
   size(21 * scale, 9 * scale);
 }
@@ -25,6 +28,10 @@ void setup(){
   println("============ SETUP INICIALIZADO ============");
   MAIN_APPLET = this;
   SETUP__gifsMap();
+  SETUP_SKY();
+  clmIndex = (int) random(tones.size());
+  lightKind = (clmIndex > 3) ? "LINEAR" : (random(1) < 0.5f) ? "EXP" : "LINEAR";
+  sky.get(clmIndex).loadGradient();
   
   thresholdPointer = new PVector(width * 0.5, height * 0.5);
   colorMode(HSB, 360, 100, 100);
@@ -38,21 +45,12 @@ void setup(){
   colorMode(RGB, 255, 255, 255);
 
   CLM = new ColorLightModel(
-    monoHueTones.get(1),
-    "EXP",
-    10
+    tones.get(clmIndex),
+    lightKind,
+    10,
+    new float[]{random(0, 20), random(50, 100)}
   );
 
-  GRAD = new Gradient(
-    true,
-    new PVector(0, 0),
-    PI / 5,
-    new ArrayList<ColorPercentage>(){{
-      add(new ColorPercentage(color(255, 0, 0, 255), 0.0f));
-      add(new ColorPercentage(color(0, 255, 255, 64), 0.75f));
-      add(new ColorPercentage(color(0, 0, 255, 0), 1.0f));
-    }}
-  );
   SETUP__terrains();
 
   colorMode(HSB, 360, 100, 100);
@@ -82,6 +80,7 @@ void keyReleased() {
 void draw(){
   thresholdPointer = new PVector(mouseX, mouseY);
   background(255);
+  sky.get(clmIndex).display(this.g);
   MainGraphics.forEach(
     gl -> gl.display()
   );

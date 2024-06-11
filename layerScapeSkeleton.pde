@@ -84,12 +84,12 @@ class LayerScapeSkeleton{
                     map(
                         thresholdPointer.x,
                         width * 0.5, width,
-                        0, outlier * 0.15 / this.threshold
+                        0, (float) outlier * 0.15 / this.threshold
                     ),
                     map(
                         thresholdPointer.y,
                         height * 0.5, height,
-                        0, outlier * 0.03 / this.threshold
+                        0, (float) outlier * 0.03 / this.threshold
                     )
                 );
                     //

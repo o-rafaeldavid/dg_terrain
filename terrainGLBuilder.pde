@@ -14,6 +14,7 @@ GraphicLayer terrainGLBuilder(
     else{
         GraphicLayer returnGraphic;
         int clmSize = _CLM.getList().size();
+        boolean isExponential = (_CLM.getKind().equals("EXP"));
         
         //////
         //////
@@ -36,7 +37,7 @@ GraphicLayer terrainGLBuilder(
                                 random(minMax.x, minMax.y)
                             },
                             firstY,
-                            1,
+                            map(i, 0, clmSize, 0.1, 1),
                             0,
                             0,
                             new ArrayList<MyGif>(),
@@ -70,9 +71,13 @@ GraphicLayer terrainGLBuilder(
                             firstY,
                             1,
                             1,
-                            (checkMountain) ? 0 : (int) random(0, 4),
+                            /* (checkMountain) ? 0 :  */(int) random(0, 4),
                             new ArrayList<MyGif>(){{
-                                add(__gifsMap.get("Thumper.gif"));
+                                add(__gifsMap.get("Atreides_Rise.gif"));
+                                add(__gifsMap.get("Atreides_siluette_2.gif"));
+                                add(__gifsMap.get("Atreides_siluette.gif"));
+                                if(checkMountain) add(__gifsMap.get("Orinitoptero.gif"));
+                                if(checkMountain) add(__gifsMap.get("Ornitopther_2.gif"));
                             }},
                             (checkMountain) ? false : true
                         ));
@@ -84,13 +89,13 @@ GraphicLayer terrainGLBuilder(
                 }}, new Gradient(
                         true,
                         new PVector(0, 0),
-                        PI / 5,
+                        random(0, PI / 3),
                         new ArrayList<ColorPercentage>(){{
-                            add(new ColorPercentage(color(255, 0, 0, 255), 0.0f));
-                            add(new ColorPercentage(color(0, 255, 255, 64), 0.75f));
-                            add(new ColorPercentage(color(0, 0, 255, 0), 1.0f));
+                            add(new ColorPercentage(color(255, 255, 255, (isExponential) ? 0 : 128), 0.0f));
+                            add(new ColorPercentage(color(180, 143, 95, 128), 0.75f));
+                            add(new ColorPercentage(color(100, 98, 41, 255), 1.0f));
                         }}
-                    ), 7);
+                    ), round(clmSize * 0.7), (isExponential) ? 32 : 180);
                 returnGraphic.mapLayersColorWithModel(CLM);
                 break;	
         }

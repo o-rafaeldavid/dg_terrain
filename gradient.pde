@@ -4,6 +4,7 @@ class Gradient extends ColorPercentageList{
     private float rot;
     private PGraphics _g;
     private PImage _img;
+    private boolean isLoaded = false;
 
     Gradient(boolean kind, PVector pos, float rot, ArrayList<ColorPercentage> colorPercentage){
         super(colorPercentage);
@@ -12,10 +13,9 @@ class Gradient extends ColorPercentageList{
         this.rot = rot;
 
         this._g = createGraphics(2 * width, round(height + (float) width * (float) sin(rot)));
-        this.createGradient();
     }
 
-    private void createGradient(){
+    private void loadGradient(){
         this._g.beginDraw();
             this._g.clear();
             this._g.pushMatrix();
@@ -52,12 +52,19 @@ class Gradient extends ColorPercentageList{
 
         this._g.updatePixels();
         this._img = this._g.get();
+        this.isLoaded = true;
     }
 
     public void display(PGraphics _g){
-        _g.push();
-            _g.imageMode(CENTER);
-            _g.image(this._img, width * .5f, height * .5f);
-        _g.pop();
+        if(this.isLoaded){
+            _g.push();
+                _g.imageMode(CENTER);
+                _g.image(this._img, width * .5f, height * .5f);
+            _g.pop();
+        }
+        else{
+            println("Gradient should be loaded using method loadGradient");
+            exit();
+        }
     }
 }

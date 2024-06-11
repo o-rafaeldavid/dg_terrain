@@ -61,7 +61,7 @@ class MyGif{
         PImage frameShow = this.allFrames[this.counter % this.allFrames.length];
         PVector newDimension = new PVector(frameShow.width, frameShow.height).mult(scaleFactor);
         _g.push();
-            _g.translate(- 1 * frameShow.width * 0.5, -1 * elevate * newDimension.y);
+            _g.translate(-1 * newDimension.x * 0.5, -1 * elevate * newDimension.y);
             _g.translate(pos.x, pos.y);
             _g.tint(C);
             _g.image(
@@ -69,12 +69,12 @@ class MyGif{
                 0, 0,
                 newDimension.x, newDimension.y
             );
-            _g.stroke(0, 0, 255);
+            /* _g.stroke(0, 0, 255);
             _g.strokeWeight(10);
             _g.point(
-                frameShow.width * 0.5,
+                0,
                 elevate * newDimension.y
-            );
+            ); */
         _g.pop();
 
         this.elapsedTime += this.sketchFrameDuration;

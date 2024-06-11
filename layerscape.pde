@@ -41,12 +41,12 @@ class LayerScape extends LayerScapeSkeleton{
     this.GifsToChoice = GifsToChoice;
   }
 
-  public void display(PGraphics _g){
+  private void privateDisplay(PGraphics _g, color C){
     this.displaySkeleton(_g, () -> {
         _g.pushStyle();
           if(!debugLine) _g.noStroke();
           else _g.stroke(0, 0, 0, 128);
-          _g.fill(fillColor);
+          _g.fill(C);
           _g.beginShape();
           
             if(!this.bezier){
@@ -82,9 +82,12 @@ class LayerScape extends LayerScapeSkeleton{
     );
   }
 
+  public void display(PGraphics _g){
+    this.privateDisplay(_g, this.fillColor);
+  }
+
   private PVector getRandomVisiblePoint(float maxVisibleLength){
-    if(layerBefore == null) return null;
-    else{
+
       PVector visiblePoint = new PVector(-1, -1);
       boolean finished = false;
       while(!finished){
@@ -94,7 +97,14 @@ class LayerScape extends LayerScapeSkeleton{
         PVector otherSegmentPoint = new PVector(-1, -1);
 
         for(int k = 0; k <= 1; k++){
-          ArrayList<PVector> pointsToManage = (k == 0) ? this.Points : layerBefore.getPoints();
+          ArrayList<PVector> pointsToManage =
+            (k == 0) ? this.Points
+            : (layerBefore == null)
+            ? new ArrayList<PVector>(){{
+              add(new PVector(0, height));
+              add(new PVector(width, height));
+            }}
+            : layerBefore.getPoints();
 
           for(int index = 1; index < pointsToManage.size(); index++){
             PVector prevPoint = pointsToManage.get(index - 1);
@@ -120,12 +130,14 @@ class LayerScape extends LayerScapeSkeleton{
         }
       }
       return visiblePoint;
-    }
   }
 
   public void genGifs(){
     println("--> LayerScape: gerando gifs na Layer");
-    if(this.GifsToChoice.size() >= 1 && maxGifNum == 0){
+    
+    if (layerBefore == null && this.maxGifNum > 1) this.maxGifNum = 1;
+
+    if(this.GifsToChoice.size() >= 1){
       for(int k = 0; k <= maxGifNum; k++){
         if(random(0, 1) < probGifPerIteration){
 
@@ -156,7 +168,7 @@ class LayerScape extends LayerScapeSkeleton{
         if(point != null) GifList.get(i).display(
                             _g,
                             point,
-                            (maxLayer != -1 && layerOrder != -1) ? map(layerOrder, 0, maxLayer, 0.3, 1) : 1,
+                            (layerBefore == null) ? 2 : (maxLayer != -1 && layerOrder != -1) ? map(layerOrder, 0, maxLayer, 0.3, 1) : 1,
                             this.fillColor
                           );
       }

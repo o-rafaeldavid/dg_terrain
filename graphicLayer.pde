@@ -4,6 +4,7 @@ class GraphicLayer{
     private ArrayList<LayerScape> Layers;
     private Gradient gradientAbove;
     private int gradOrder;
+    private int gradAlpha;
 
     GraphicLayer(int layerID, ArrayList<LayerScape> Layers){
         this.layerID = layerID;
@@ -14,7 +15,7 @@ class GraphicLayer{
         this.orderLayers();
     }
 
-    GraphicLayer(int layerID, ArrayList<LayerScape> Layers, Gradient gradientAbove, int gradOrder){
+    GraphicLayer(int layerID, ArrayList<LayerScape> Layers, Gradient gradientAbove, int gradOrder, int gradAlpha){
         this.layerID = layerID;
         this.Layers = Layers;
 
@@ -28,6 +29,7 @@ class GraphicLayer{
             println("gradientAbove prop from GraphicLayer should not be null!");
             exit();
         }
+        
 
         this._g = createGraphics(width, height);
 
@@ -35,7 +37,9 @@ class GraphicLayer{
 
         println("--> GraphicLayer: Degradê inicializado");
         this.gradOrder = gradOrder;
+        this.gradAlpha = gradAlpha;
         this.gradientAbove = gradientAbove;
+        this.gradientAbove.loadGradient();
         println("--> GraphicLayer: Degradê finalizado");
     }
     ///
@@ -43,7 +47,7 @@ class GraphicLayer{
     private void orderLayers(){
         if(this.Layers.size() > 1){
             println("--> GraphicLayer: Iniciando ordenação de Layers");
-            PVector thresholdRange = new PVector(random(0.7, 0.94), random(0.2, 0.3));
+            PVector thresholdRange = new PVector(0.2, 0.9);
             PVector heights = new PVector(this.Layers.get(0).getHeight(), -1);
             this.Layers.forEach(layer -> {
                 float layerHeight = layer.getHeight();
@@ -98,10 +102,9 @@ class GraphicLayer{
             this._g.clear();
             for(int index = 0; index < this.Layers.size(); index++){
                 this.Layers.get(index).display(_g);
-                if(this.gradientAbove != null && this.gradOrder == index){
-                    //this.Layers.get(index).display(_g);
-                    /* _g.tint(255, 128); */
-                    this.gradientAbove.display(_g);
+                if(this.gradientAbove != null && (this.Layers.size() - 1) - this.gradOrder == index){
+                    this._g.tint(255, this.gradAlpha);
+                    this.gradientAbove.display(this._g);
                 }
             }
         this._g.endDraw();
