@@ -120,10 +120,10 @@ void draw(){
     thresholdPointer.x = thresholdPointer.x - random(thresholdMinMax[0], thresholdMinMax[1]);
   }
   if(keys['d'] || keys['D']){
-    thresholdPointer.x = thresholdPointer.x + random(thresholdMinMax[0], thresholdMinMax[1]);
+    thresholdPointer.x = thresholdPointer.x + random(thresholdMinMax[0], thresholdMinMax[1]) * 0.5f;
   }
   if(keys['w'] || keys['w']){
-    thresholdPointer.y = thresholdPointer.y - random(thresholdMinMax[0], thresholdMinMax[1]);
+    thresholdPointer.y = thresholdPointer.y - random(thresholdMinMax[0], thresholdMinMax[1]) * 0.5f;
   }
   if(keys['s'] || keys['S']){
     thresholdPointer.y = thresholdPointer.y + random(thresholdMinMax[0], thresholdMinMax[1]);

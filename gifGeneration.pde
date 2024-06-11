@@ -31,8 +31,8 @@ void SETUP__gifsMap(){
         put("Chani_and_paul.gif",           new float[]{5, 0.95, 0.21, 0.03});
         put("Freman.gif",                   new float[]{5, 0.95, 0.28, 0.03});
         put("Muad'ib.gif",                  new float[]{5, 0.95, 0.17, 0.03});
-        put("Orinitoptero.gif",             new float[]{25, 1.2, 0.23, 0.03});
-        put("Ornitopther_2.gif",            new float[]{5, 1.2, 0.23, 0.03});
+        put("Orinitoptero.gif",             new float[]{25, 1.2, 0.20, 0.03});
+        put("Ornitopther_2.gif",            new float[]{5, 1.2, 0.20, 0.03});
         put("Revelation.gif",               new float[]{6, 0.95, 0.21, 0.03});
         put("SandWalking.gif",              new float[]{5, 0.95, 0.25, 0.03});
         put("sardukar.gif",                 new float[]{5, 1, 0.40, 0.07});
