@@ -19,7 +19,10 @@ int clmIndex = -1;
 String lightKind = "";
 
 PVector thresholdPointer;
-
+float[] thresholdMinMax = new float[]{
+  random(0, 3),
+  random(4, 9)
+}
 int TEMPO = 15;
 int FRAME_RATE = 30;
 int frameCounter = 0;
@@ -114,16 +117,16 @@ void draw(){
   }
   background(255);
   if(keys['a'] || keys['A']){
-    thresholdPointer.x = thresholdPointer.x - random(0, 2);
+    thresholdPointer.x = thresholdPointer.x - random(thresholdMinMax[0], thresholdMinMax[1]);
   }
   if(keys['d'] || keys['D']){
-    thresholdPointer.x = thresholdPointer.x + random(0, 2);
+    thresholdPointer.x = thresholdPointer.x + random(thresholdMinMax[0], thresholdMinMax[1]);
   }
   if(keys['w'] || keys['w']){
-    thresholdPointer.y = thresholdPointer.y - random(0, 2);
+    thresholdPointer.y = thresholdPointer.y - random(thresholdMinMax[0], thresholdMinMax[1]);
   }
   if(keys['s'] || keys['S']){
-    thresholdPointer.y = thresholdPointer.y + random(0, 2);
+    thresholdPointer.y = thresholdPointer.y + random(thresholdMinMax[0], thresholdMinMax[1]);
   }
   sky.get(clmIndex).display(this.g);
   MainGraphics.forEach(
