@@ -95,7 +95,7 @@ void keyPressed(){
 
 void draw(){
   if(frameCounter == FRAME_RATE * TEMPO){
-    println("============ FINALIZADO ============");
+    println("============ FINALIZADO ============")
     exit();
   }
   background(255);
