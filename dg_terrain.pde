@@ -112,16 +112,16 @@ void draw(){
   }
   background(255);
   if(keys['a'] || keys['A']){
-    thresholdPointer.x = thresholdPointer.x - random(7, 35);
+    thresholdPointer.x = thresholdPointer.x - random(5, 12);
   }
   if(keys['d'] || keys['D']){
-    thresholdPointer.x = thresholdPointer.x + random(7, 35);
+    thresholdPointer.x = thresholdPointer.x + random(5, 12);
   }
   if(keys['w'] || keys['w']){
-    thresholdPointer.y = thresholdPointer.y - random(7, 35);
+    thresholdPointer.y = thresholdPointer.y - random(5, 12);
   }
   if(keys['s'] || keys['S']){
-    thresholdPointer.y = thresholdPointer.y + random(7, 35);
+    thresholdPointer.y = thresholdPointer.y + random(5, 12);
   }
   sky.get(clmIndex).display(this.g);
   MainGraphics.forEach(
