@@ -85,23 +85,6 @@ void keyReleased() {
     );
   } */
   keys[key] = false;
-
-  if(key == 'n' || key == 'N'){
-    noLoop();
-    File folder = new File(folderPath);
-    if (folder.isDirectory()) {
-      File[] files = folder.listFiles();
-      if (files != null) {
-        for (File file : files) {
-          file.delete();
-        }
-        
-        println("============ ELIMINADO ============");
-      }
-    }
-    folder.delete();
-    println("============ ELIMINADO ============");
-    /* exit(); */
   }
 }
 
